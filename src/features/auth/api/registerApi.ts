@@ -1,22 +1,17 @@
 import { api } from '@/api/api';
-import { UserResponse, LoginCredentials, LoginTokenCredentials } from '../types/auth';
+import type { UserResponse, UserForRegistration } from '../types/auth';
 
-export const loginApi = api.injectEndpoints({
+export const registerApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<UserResponse, LoginCredentials>({
-      query: (credentials) => ({ url: 'auth/login', method: 'POST', body: credentials }),
-    }),
-    loginToken: builder.mutation<UserResponse, LoginTokenCredentials>({
-      query: ({ token }) => ({
-        url: 'auth/login',
+    register: builder.mutation<UserResponse, UserForRegistration>({
+      query: (user) => ({
+        url: 'users/add',
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        // TODO: Use a backend that supports refresh tokens, instead of hardcoding the credentials
-        // (using loginToken to simulate refresh token in tests)
-        body: { username: 'kminchelle', password: '0lelplR', loginToken: true },
+        headers: { 'Content-Type': 'application/json' },
+        body: user,
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useLoginTokenMutation } = loginApi;
+export const { useRegisterMutation } = registerApi;
