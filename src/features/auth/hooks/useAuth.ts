@@ -1,11 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useAppSelector, useAppDispatch } from '@/hooks/store';
 import { selectCurrentUser, logout as _logout } from '../stores/authSlice';
-import storage from '@/utils/storage';
 
 export const useAuth = () => {
-  const user = storage.getToken();
-  const userId = storage.getUserId();
+  const user = useAppSelector(selectCurrentUser);
+  const userId = user?.id;
 
   const dispatch = useAppDispatch();
 
