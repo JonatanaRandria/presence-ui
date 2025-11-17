@@ -9,14 +9,29 @@ export type CreateEvent = {
 }
 
 export type Event = {
-    id: number,
+    id: string,
     title : string ,
     start_datetime : string, 
-    end_datetime : string, 
+    end_datetime : string,
+    // TODO: fix backend about this field. Using models User is the best way ? btw, this is only for development environment 
+    createdBy: string,
+    createdByFullName : string,
     location_name : string,
     official_lattitude : number,
     official_longitude: number,
-    createdBy : string
     is_presence_active : boolean
-
 }
+
+
+export type EventToList = {
+    id: string,
+    title : string ,
+    start_datetime : string, 
+    end_datetime : string,
+    // TODO: fix backend about this field. Using models User is the best way ? btw, this is only for development environment 
+    createdBy: string,
+    createdByFullName : string,
+    location_name : string,
+    is_presence_active : boolean
+}
+

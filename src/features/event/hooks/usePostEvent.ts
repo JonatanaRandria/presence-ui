@@ -13,7 +13,7 @@ type usePostEventProps = {
   onSuccess?: (payload: Event) => void;
 };
 
-export const usePostEvent = ({ euserId, schema, defaultValues, onSuccess }: usePostEventProps) => {
+export const usePostEvent = ({  schema, defaultValues, onSuccess }: usePostEventProps) => {
   const useFormApi = useForm<CreateEvent>({ resolver: yupResolver(schema), defaultValues });
   const [createEvent] = useCreateEventMutation();
 
