@@ -1,7 +1,5 @@
 import  { createSlice } from '@reduxjs/toolkit';
 import { loginApi } from '../api/loginApi';
-import { registerApi } from '../api/registerApi';
-import { userApi } from '@/features/users/';
 import storage from '@/utils/storage';
 import type { AuthState, User } from '../types/auth';
 import type { RootState } from '@/stores/store';
@@ -55,13 +53,7 @@ const slice = createSlice({
       .addMatcher(loginApi.endpoints.loginToken.matchRejected, () => {
         storage.clearToken();
       })
-      .addMatcher(registerApi.endpoints.register.matchFulfilled, () => {
-        // TODO: Use a backend that supports login on registration by returning token, instead of logging in manually in the component
-      })
-      .addMatcher(userApi.endpoints.getAuthUserById.matchFulfilled, (state, { payload }) => {
-        const { password: _, ...user } = payload;
-        state.user = prepareUser(user);
-      });
+
   },
 });
 

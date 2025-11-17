@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from '@/lib/useForm';
 import { getErrorMessage } from '@/api/utils';
-import { LoginCredentials, User } from '../types/auth';
+import type { LoginCredentials, User } from '../types/auth';
 import { useLoginMutation } from '../api/loginApi';
 import { rememberAuth } from '../stores/authSlice';
 import { useAppDispatch } from '@/hooks/store';

@@ -8,17 +8,6 @@ export type User = {
     image: string;
   };
   
-  export type UserForRegistration = {
-    username: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    gender?: string;
-    image?: string;
-    password: string;
-    passwordConfirmation: string;
-    terms: boolean;
-  };
   
   export type LoginCredentials = {
     username: string;
