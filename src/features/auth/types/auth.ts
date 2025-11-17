@@ -10,13 +10,9 @@ export type User = {
   
   
   export type LoginCredentials = {
-    username: string;
+    email: string;
     password: string;
     remember?: boolean;
-  };
-  
-  export type LoginTokenCredentials = {
-    token: string;
   };
   
   export type UserResponse = {

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { useLoginTokenMutation } from '../api/loginApi';
 
 import storage from '@/utils/storage';
+import { useLoginMutation } from '../api/loginApi';
 
 export const useInitAuth = () => {
   const token = storage.getToken();
-  const [loginToken, { isUninitialized, isLoading, isSuccess, isError }] = useLoginTokenMutation();
+  const [loginToken, { isUninitialized, isLoading, isSuccess, isError }] = useLoginMutation();
 
   useEffect(() => {
     if (token) {

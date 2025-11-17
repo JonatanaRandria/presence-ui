@@ -42,18 +42,7 @@ const slice = createSlice({
           storage.setToken(token);
         }
       })
-      .addMatcher(loginApi.endpoints.loginToken.matchFulfilled, (state, { payload }) => {
-        const { token, ...user } = payload;
-        state.token = token;
-        state.user = prepareUser(user);
-        if (state.remember) {
-          storage.setToken(token);
-        }
-      })
-      .addMatcher(loginApi.endpoints.loginToken.matchRejected, () => {
-        storage.clearToken();
-      })
-
+  
   },
 });
 

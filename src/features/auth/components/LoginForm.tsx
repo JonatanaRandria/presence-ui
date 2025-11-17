@@ -5,7 +5,7 @@ import { useLoginUser } from '../hooks/useLoginUser';
 import type { LoginCredentials, User } from '../types/auth';
 
 const schema: yup.ObjectSchema<LoginCredentials> = yup.object({
-  username: yup.string().required('Valid username is required'),
+  email: yup.string().required('Valid emai is required'),
   password: yup.string().required('Password is required'),
   remember: yup.boolean(),
 });
@@ -15,7 +15,7 @@ type LoginFormProps = { onSuccess?: (user: User) => void };
 export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   // Demo data
   const defaultValues = {
-    username: 'john doe',
+    email : 'johndoe@test.com',
     password: '********',
   };
 
@@ -33,13 +33,13 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
 
       <form onSubmit={onSubmit}>
         <InputField
-          {...register('username')}
-          invalidFeedback={errors.username?.message}
-          className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+          {...register('email')}
+          invalidFeedback={errors.email?.message}
+          className={`form-control ${errors.email ? 'is-invalid' : ''}`}
           disabled={isSubmitting}
-          type='text'
-          placeholder='Username *'
-          label='Username *'
+          type='email'
+          placeholder='email *'
+          label='email *'
         />
 
         <InputField
