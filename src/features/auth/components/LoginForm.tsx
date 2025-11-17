@@ -15,8 +15,8 @@ type LoginFormProps = { onSuccess?: (user: User) => void };
 export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   // Demo data
   const defaultValues = {
-    username: 'kminchelle',
-    password: '0lelplR',
+    username: 'john doe',
+    password: '********',
   };
 
   const { onSubmit, register, errors, isSubmitting } = useLoginUser({
@@ -29,7 +29,6 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
     <>
       <h1 className='h3 mb-3 fw-normal'>Please sign in</h1>
       <p className='mb-1 text-body-secondary fst-italic'>
-        <small>(Pre-filled with demo account)</small>
       </p>
 
       <form onSubmit={onSubmit}>
@@ -53,19 +52,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
           label='Password *'
         />
 
-        <div className='form-check text-start my-3'>
-          <input
-            {...register('remember')}
-            className={`form-check-input ${errors.remember ? 'is-invalid' : ''}`}
-            disabled={isSubmitting}
-            id='checkbox-remember'
-            type='checkbox'
-            name='remember'
-          />
-          <label className='form-check-label' htmlFor='checkbox-remember'>
-            Keep me logged-in
-          </label>
-        </div>
+       
 
         <button className='btn btn-primary w-100 py-2 mt-2' type='submit' disabled={isSubmitting}>
           Submit
