@@ -12,6 +12,7 @@ const initialState: AuthState = {
 };
 
 const prepareUser = (user: User): User => {
+  
   return {
     ...user,
     image: user.image || `https://image.dummyjson.com/300x300/008080/ffffff?text=${user.username}`,
@@ -35,12 +36,12 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(loginApi.endpoints.login.matchFulfilled, (state, { payload }) => {
-        const { token, ...user } = payload;
+        const { token, ...user } = payload;        
         state.token = token;
-        state.user = prepareUser(user);
-        if (state.remember) {
-          storage.setToken(token);
-        }
+        state.user = prepareUser(payload);        
+          storage.setToken('token',token);
+          storage.setToken('userid',payload.user.id)
+        
       })
   
   },

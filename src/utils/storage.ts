@@ -1,14 +1,18 @@
-import { STORAGE_PREFIX } from '@/config';
+
 
 const storage = {
   getToken: () => {
-    return JSON.parse(window.localStorage.getItem(`${STORAGE_PREFIX}token`) as string);
+    return JSON.parse(window.localStorage.getItem(`token`) as string);
   },
-  setToken: (token: string) => {
-    window.localStorage.setItem(`${STORAGE_PREFIX}token`, JSON.stringify(token));
+  getUserId: () => {
+    return JSON.parse(window.localStorage.getItem(`userId`) as string);
+  },
+  setToken: ( key : string, token: string) => {
+    window.localStorage.setItem(key, JSON.stringify(token));
   },
   clearToken: () => {
-    window.localStorage.removeItem(`${STORAGE_PREFIX}token`);
+    window.localStorage.removeItem(`token`);
+    window.localStorage.removeItem(`userid`);
   },
 };
 

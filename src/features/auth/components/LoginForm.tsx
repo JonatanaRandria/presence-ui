@@ -16,7 +16,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   // Demo data
   const defaultValues = {
     email : 'johndoe@test.com',
-    password: '********',
+    password: '123456',
   };
 
   const { onSubmit, register, errors, isSubmitting } = useLoginUser({

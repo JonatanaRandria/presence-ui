@@ -6,5 +6,5 @@ const { Login } = lazily(() => import('@/pages/Login/Login'));
 
 
 export const publicRoutes = ({ user }: { user: User | null }) => [
-  { path: '/login', element: !user ? <Login /> : <Navigate to='/profile' replace /> },
+  { path: '/login', element: !user ? <Login /> : <Navigate to='/' replace /> },
 ];
