@@ -9,8 +9,11 @@ type MainLayoutProps = {
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
+    
       <Header />
-      {children}
+
+      <div className="main-layout"> {children}</div>
+     
     </>
   );
 };

@@ -7,9 +7,30 @@ type ContentLayoutProps = {
 
 export const ContentLayout = ({ children, title }: ContentLayoutProps) => {
   return (
-    <div className='container mt-3'>
-      {title ? <h1 className='display-5 mb-1'>{title}</h1> : null}
-      <div className='mb-5'>{children}</div>
+    <div
+      className="container pt-5"
+      style={{
+        height: "calc(100vh - 80px)", // header ≈ 70-80px
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {title ? (
+        <h1 className="display-5 mb-3" style={{ flexShrink: 0 }}>
+          {title}
+        </h1>
+      ) : null}
+
+      {/* Zone scrollable */}
+      <div
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          paddingRight: "6px",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };

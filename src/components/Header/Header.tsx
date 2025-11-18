@@ -2,13 +2,20 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { NavItem } from '../NavItem/NavItem';
 import { useAuth } from '@/features/auth';
 import { APP_TITLE } from '@/config';
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/logo.jpeg';
 
 export function Header() {
   const { user } = useAuth();
 
   return (
-    <nav className='navbar navbar-expand navbar-scroll bg-body-tertiary'>
+    <nav  className="navbar navbar-expand navbar-scroll bg-body-tertiary"
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      zIndex: 1000
+    }}>
       <div className='container'>
         <NavLink to='/' className='navbar-brand'>
           {APP_TITLE}
