@@ -3,8 +3,6 @@ export type CreateEvent = {
     start_datetime : string, 
     end_datetime : string, 
     location_name : string,
-    official_lattitude : number,
-    official_longitude: number,
     createdBy : string
 }
 

@@ -11,7 +11,7 @@ export const eventApi = api.injectEndpoints({
     }),
     createEvent: builder.mutation<Event, CreateEvent>({
       query: (eventData) => ({
-        url: '/event/events',
+        url: '/event/events/',
         method: 'POST',
         body: eventData,
       }),

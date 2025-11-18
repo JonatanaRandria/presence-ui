@@ -12,13 +12,13 @@ export const EventDetails = ({ post }: _EventDetailsProps) => {
   return (
     <div className='border rounded shadow-sm mb-4 p-4 bg-white position-relative'>
 
-      {/* Ligne 1 : Titre + Créé par */}
+      {/* Row 1: Title + Created by */}
       <div className='d-flex justify-content-between align-items-center mb-2'>
         <h3 className='mb-0'>{post.title}</h3>
-        <small className='text-muted'>Créé par {post.createdByFullName}</small>
+        <small className='text-muted'>Created by {post.createdByFullName}</small>
       </div>
 
-      {/* Ligne 2 : Date + Badge */}
+      {/* Row 2: Date + Badge */}
       <div className='d-flex justify-content-between align-items-center'>
         <div>
           <small className='text-muted'>{formattedStartTime}</small>
@@ -29,15 +29,15 @@ export const EventDetails = ({ post }: _EventDetailsProps) => {
         <span
           className={`badge px-3 py-2 ${post.is_presence_active ? 'bg-success' : 'bg-warning'}`}
         >
-          {post.is_presence_active ? 'En présence' : 'En attente'}
+          {post.is_presence_active ? 'In presence' : 'Pending'}
         </span>
       </div>
 
-      {/* Bouton si pas encore en présence */}
+      {/* Button if presence not started */}
       {!post.is_presence_active && (
         <div className='mt-3 text-end'>
           <button className='btn btn-primary'>
-            Lancer une présence
+            Start presence
           </button>
         </div>
       )}

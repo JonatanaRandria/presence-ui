@@ -50,7 +50,7 @@ function UserLinks() {
 
   return (
     <>
-      <NavItem text='+ Add Event' to='/posts/add' className='btn btn-outline-primary rounded-pill me-2' />
+      <NavItem text='+ Add Event' to='/event/add' className='btn btn-outline-primary rounded-pill me-2' />
       <NavItem to='/profile' className='btn btn-outline-secondary rounded-pill me-2'>
         <img className='rounded-circle bg-body me-2' src={user?.image} width='24' height='24' alt={name} />
         {name}
