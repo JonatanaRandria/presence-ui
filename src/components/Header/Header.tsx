@@ -46,15 +46,12 @@ function GuestLinks() {
 
 function UserLinks() {
   const { user, logout } = useAuth();
-  const name = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() ?? user?.email;
-
+  
   return (
     <>
       <NavItem text='+ Add Event' to='/event/add' className='btn btn-outline-primary rounded-pill me-2' />
-      <NavItem to='/profile' className='btn btn-outline-secondary rounded-pill me-2'>
-        <img className='rounded-circle bg-body me-2' src={user?.image} width='24' height='24' alt={name} />
-        {name}
-      </NavItem>
+      
+      
       <NavItem type='button' text='Logout' onClick={logout} />
     </>
   );

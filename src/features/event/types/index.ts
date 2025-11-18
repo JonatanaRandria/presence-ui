@@ -17,7 +17,8 @@ export type Event = {
     location_name : string,
     official_lattitude : number,
     official_longitude: number,
-    is_presence_active : boolean
+    is_presence_active : boolean,
+    status : string
 }
 
 
@@ -30,6 +31,7 @@ export type EventToList = {
     createdBy: string,
     createdByFullName : string,
     location_name : string,
-    is_presence_active : boolean
+    is_presence_active : boolean,
+    status : string
 }
 
