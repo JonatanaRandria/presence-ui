@@ -62,10 +62,6 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
           <div className='alert alert-danger mt-2'>{errors.root.serverError.message}</div>
         ) : null}
       </form>
-
-      <p className='mt-5 text-center'>
-        <Link to='/register'>Don't have an account yet?</Link>
-      </p>
     </>
   );
 };

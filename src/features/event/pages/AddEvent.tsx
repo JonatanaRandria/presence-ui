@@ -3,6 +3,7 @@ import { InputField } from "@/components/Form/InputField";
 import * as yup from "yup";
 import { usePostEvent } from "../hooks/usePostEvent";
 
+
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
   start_datetime: yup.string().required("Start date is required"),

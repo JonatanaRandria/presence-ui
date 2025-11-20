@@ -30,14 +30,20 @@ export const EventListPage = () => {
     <>
       <Head title="Events" />
       <ContentLayout title="Events">
-        <div className="mt-3">
-          <DebouncedInputField
-            label="Search"
-            placeholder="Search events"
-            defaultValue={query}
-            onDebouncedChange={handleSearchChange}
-          />
-        </div>
+      
+
+        <div 
+                    
+                    className="sticky-top bg-white shadow-sm pt-3 pb-3 border-bottom"
+                    style={{ top: '0', zIndex: 1020 }} 
+                >
+                  <DebouncedInputField
+                            label="Search"
+                            placeholder="Search events"
+                            defaultValue={query}
+                            onDebouncedChange={handleSearchChange}
+                  />
+                </div>
         {renderContent()}
       </ContentLayout>
     </>
