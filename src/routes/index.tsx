@@ -6,7 +6,11 @@ import { publicRoutes } from './public';
 import { protectedRoutes } from './protected';
 
 export const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading Application...</div>; 
+  }
 
   const routes = [...protectedRoutes({ user }), ...publicRoutes({ user }), ...commonRoutes()];
 

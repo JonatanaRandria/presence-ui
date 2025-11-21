@@ -1,8 +1,6 @@
-// src/components/Modals/CloseEventConfirmationModal.tsx
-
 import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom';
-import { useNavigate } from 'react-router-dom'; // 👈 Importation de useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 interface CloseEventConfirmationModalProps {
   show: boolean;
@@ -17,12 +15,11 @@ export const CloseEventConfirmationModal = ({
   onClose,
   onConfirm,
 }: CloseEventConfirmationModalProps) => {
-  const navigate = useNavigate(); // 👈 Initialisation du hook de navigation
+  const navigate = useNavigate(); 
 
   const [confirmationInput, setConfirmationInput] = useState('');
   const requiredConfirmationText = `close event ${eventName}`;
 
-  // Gestion de la classe 'modal-open' pour bloquer le défilement du body
   useEffect(() => {
     if (show) {
       document.body.classList.add('modal-open');
@@ -42,18 +39,18 @@ export const CloseEventConfirmationModal = ({
 
   const handleConfirmClick = () => {
     if (isConfirmationValid) {
-      // 1. Exécuter l'action de confirmation (fermeture de la modal/appel API)
+    
       onConfirm();
       
-      // 2. Naviguer vers /event après l'action
-      navigate('/event'); // 👈 Ajout de la navigation
+    
+      navigate('/event'); 
     }
   };
 
   const MODAL_BACKDROP_ZINDEX = 1040;
   const MODAL_ZINDEX = 1050; 
 
-  // Le contenu de la modal que nous allons téléporter
+ 
   const modalContent = (
     <>
       {/* Background overlay */}
