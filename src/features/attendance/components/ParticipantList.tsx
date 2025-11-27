@@ -1,5 +1,3 @@
-// src/features/events/components/ParticipantList.tsx
-
 interface Participant {
     id: string;
     fullName: string;

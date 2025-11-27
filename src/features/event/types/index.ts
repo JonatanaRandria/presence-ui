@@ -18,6 +18,8 @@ export type Event = {
     official_lattitude : number,
     official_longitude: number,
     is_presence_active : boolean,
+    event_status : string,
+    event_code : number,
     status : string
 }
 

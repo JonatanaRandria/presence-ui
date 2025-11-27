@@ -1,8 +1,10 @@
 // src/features/events/hooks/useEventParticipantList.ts
 
-import { useState, useEffect } from 'react';
+import { useGetAttendeesListQuery } from "../api/attendees-event-api";
 
-interface Participant {
+// --- Interfaces ---
+
+export interface Participant {
   id: string;
   fullName: string;
   scannedBy: string;
@@ -16,65 +18,57 @@ interface ParticipantsListResponse {
     totalParticipants: number;
 }
 
-// Mock Data
-const ALL_MOCK_PARTICIPANTS: Participant[] = Array.from({ length: 55 }, (_, i) => ({
-    id: `M-${1000 + i}`,
-    fullName: `Participant Mock ${i + 1}`,
-    scannedBy: i % 3 === 0 ? 'John Monitor' : 'Sophie Assistant',
-    job: i % 2 === 0 ? 'Developer' : (i % 5 === 0 ? 'CTO' : 'Project Manager'),
-}));
-
-const PAGE_SIZE = 10;
+// --- Hook ---
 
 export const useEventParticipantsList = (eventId: string, page: number = 1, searchQuery: string = '') => {
-  const [data, setData] = useState<ParticipantsListResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { 
+    data, // data est de type Attendee[]
+    isLoading: isQueryLoading,
+    error: queryError, 
+    isFetching 
+  } = useGetAttendeesListQuery({
+    eventId: eventId,
+    page: page, 
+    search: searchQuery,
+  }, {
+    // Ne pas exécuter la requête si l'ID est manquant
+    skip: !eventId,
+    refetchOnMountOrArgChange: true,
+  });
 
-  useEffect(() => {
-    setIsLoading(true);
-    setError('');
-    
-    if (!eventId) {
-      setError('Event ID is missing.');
-      setIsLoading(false);
-      setData({ participants: [], currentPage: 1, totalPages: 0, totalParticipants: 0 });
-      return;
-    }
+  // 1. Détermination de l'état de chargement
+  const isLoading = isQueryLoading || isFetching;
 
-    const timer = setTimeout(() => {
-      
-      const lowerCaseQuery = searchQuery.toLowerCase();
-      
-      // 1. Filtering Logic
-      const filteredParticipants = ALL_MOCK_PARTICIPANTS.filter(p => 
-          p.fullName.toLowerCase().includes(lowerCaseQuery) ||
-          p.id.toLowerCase().includes(lowerCaseQuery) ||
-          p.job.toLowerCase().includes(lowerCaseQuery)
-      );
+  // 2. Traitement de l'erreur (création de la variable `error` de type string)
+  const error = queryError 
+    ? ('status' in queryError 
+        ? `Error ${queryError.status}: Check network or permissions.` 
+        : 'An unknown error occurred.') 
+    : '';
 
-      // 2. Pagination Calculation
-      const filteredTotal = filteredParticipants.length;
-      const filteredTotalPages = Math.ceil(filteredTotal / PAGE_SIZE);
+  // 3. Mapping des données (data est un tableau)
+  // Utilise `data` directement car l'API retourne un tableau (Attendee[])
+  const participants: Participant[] = data?.map(attendee => ({
+    id: attendee.id,
+    fullName: attendee.full_name,
+    scannedBy: attendee.scannedByFullName,
+    job: attendee.job || 'N/A', // Ajout de 'N/A' si le champ est manquant
+  })) || [];
 
-      const startIndex = (page - 1) * PAGE_SIZE;
-      const endIndex = startIndex + PAGE_SIZE;
-      
-      const participantsForPage = filteredParticipants.slice(startIndex, endIndex);
+  // 4. Construction de l'objet de réponse pour l'UI
+  const totalParticipants = participants.length;
+  const totalPages = 1; // Fixé à 1 car la pagination UI est désactivée
+  
+  const participantsData: ParticipantsListResponse = {
+    participants: participants,
+    currentPage: 1,
+    totalPages: totalPages, 
+    totalParticipants: totalParticipants,
+  };
 
-      const response: ParticipantsListResponse = {
-        participants: participantsForPage,
-        currentPage: page,
-        totalPages: filteredTotalPages,
-        totalParticipants: filteredTotal,
-      };
-
-      setData(response);
-      setIsLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [eventId, page, searchQuery]);
-
-  return { data, isLoading, error };
+  return { 
+    data: participantsData, 
+    isLoading, 
+    error // Retourne la variable `error` (string) correctement définie
+  };
 };

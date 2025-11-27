@@ -1,20 +1,15 @@
+// src/pages/EventParticipantsPage.tsx
+
 import { Head } from "@/components/Head/Head";
 import { ContentLayout } from "@/layouts/ContentLayout";
 import { PageSpinner } from "@/components/Element/Spinner/PageSpinner";
 import { ErrorPageLayout } from "@/layouts/ErrorPageLayout";
 import { ParticipantsList } from "../components/ParticipantList";
 import { useEventParticipantsList } from "../hooks/useEventParticipantList";
+import type { Participant } from "../hooks/useEventParticipantList";
 import { useParams } from 'react-router-dom';
 import React, { useState } from 'react';
 import { DebouncedInputField } from "@/components/Form/DebouncedInputField"; 
-// Importez Pagination si vous l'implémentez
-
-interface Participant {
-  id: string; 
-  fullName: string;
-  scannedBy: string;
-  job: string;
-}
 
 interface PaginationData {
     currentPage: number;
@@ -26,49 +21,51 @@ interface PaginationData {
 export const EventParticipantsPage = () => {
   const { id: eventId } = useParams<{ id: string }>(); 
 
-  const [currentPage, setCurrentPage] = useState(1); 
+  // Suppression de l'état currentPage et de son gestionnaire
   const [searchQuery, setSearchQuery] = useState('');
 
   const { 
     data: participantsData, 
     isLoading,
     error
-  } = useEventParticipantsList(eventId!, currentPage, searchQuery);
+  } = useEventParticipantsList(eventId!, 1, searchQuery); // Page est fixée à 1
 
   const eventIdDisplay = eventId || 'undefined';
   const pageHeaderTitle = `Event ID: ${eventIdDisplay} - Participants`;
 
   const handleDebouncedSearchChange = (value: string) => {
-    setCurrentPage(1); 
+    // setCurrentPage(1); // Suppression de la réinitialisation de la page
     setSearchQuery(value);
   };
+  
+  // Suppression de handlePageChange
 
   const renderContent = () => {
-    switch (true) {
-      case isLoading:
-        return <PageSpinner />;
-        
-      case !!error:
+    // Si isLoading est TRUE, le spinner s'affiche (cela devrait être transitoire)
+    if (isLoading) {
+        //         return <PageSpinner />;
+    }
+    
+    // Si la requête a échoué (error est une string non vide)
+    if (!!error) {
         return <ErrorPageLayout title="Error loading participants" message={error} />;
+    }
         
-      case !participantsData?.participants.length:
+    // Si la liste est vide (participantsData est non-null mais la liste est vide)
+    if (!participantsData?.participants.length) {
         const message = searchQuery 
           ? `No participants found matching "${searchQuery}".`
-          : "No participants found for this event.";
+          : "Aucun participant pour cet événement."; 
         return <p className="mt-5 text-center text-body-secondary">{message}</p>;
-        
-      default:
-        return (
-          <div className="mt-3">
-            <ParticipantsList participants={participantsData.participants} />
-            {/* <Pagination 
-                 currentPage={participantsData.currentPage}
-                 totalPages={participantsData.totalPages}
-                 onPageChange={setCurrentPage} 
-            /> */}
-          </div>
-        );
     }
+        
+    // Si la liste contient des données
+    return (
+      <div className="mt-3">
+        <ParticipantsList participants={participantsData.participants} />
+        {/* Suppression du composant <Pagination /> */}
+      </div>
+    );
   };
 
   return (
