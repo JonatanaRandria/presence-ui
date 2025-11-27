@@ -1,7 +1,5 @@
-// Fichier: ../api/attendanceApi.ts
-
 import { api } from '@/api/api';
-import type { Event } from '../types'; // Assurez-vous que le type Event est importé
+
 
 // --- Définitions de types pour les endpoints de présence (Attendance) ---
 
@@ -16,6 +14,10 @@ export type AttendanceActionResponse = {
   message: string;
   event_status: string; // Ex: 'IN_PROGRESS' ou 'PASSED'
   primary_responsible_id?: string | null; 
+  /** * Code/PIN de l'événement généré lors de l'activation, utilisé pour l'enregistrement des participants.
+   * Ajouté pour supporter l'affichage du code après l'activation.
+   */
+  event_code?: number; 
 };
 
 // --- API Client (Injection d'endpoints) ---
