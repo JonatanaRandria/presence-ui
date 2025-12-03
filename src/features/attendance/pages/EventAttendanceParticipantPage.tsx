@@ -10,6 +10,8 @@ import type { Participant } from "../hooks/useEventParticipantList";
 import { useParams } from 'react-router-dom';
 import React, { useState } from 'react';
 import { DebouncedInputField } from "@/components/Form/DebouncedInputField"; 
+// Import du hook pour les détails de l'événement
+import { useEventDetails } from "@/features/event/hooks/useEventDetails";
 
 interface PaginationData {
     currentPage: number;
@@ -21,34 +23,45 @@ interface PaginationData {
 export const EventParticipantsPage = () => {
   const { id: eventId } = useParams<{ id: string }>(); 
 
-  // Suppression de l'état currentPage et de son gestionnaire
+  // 1. Récupération des détails de l'événement
+  const { 
+    event, 
+    isLoading: isEventLoading, 
+    error: eventError 
+  } = useEventDetails();
+
   const [searchQuery, setSearchQuery] = useState('');
 
+  // 2. Récupération de la liste des participants
   const { 
     data: participantsData, 
-    isLoading,
-    error
-  } = useEventParticipantsList(eventId!, 1, searchQuery); // Page est fixée à 1
+    isLoading: isParticipantsLoading,
+    error: participantsError
+  } = useEventParticipantsList(eventId!, 1, searchQuery); 
 
-  const eventIdDisplay = eventId || 'undefined';
-  const pageHeaderTitle = `Event ID: ${eventIdDisplay} - Participants`;
+  // 3. Gestion des titres et des états de chargement/erreur
+  const eventName = event?.title || 'Loading Event...';
+  // Afficher le nom de l'événement ou un identifiant si le nom est manquant/en cours de chargement
+  const pageHeaderTitle = `Event: ${eventName} - Participants`;
+
+  // Combiner les états de chargement et d'erreur
+  const combinedIsLoading = isEventLoading || isParticipantsLoading;
+  const combinedError = eventError || participantsError;
+
 
   const handleDebouncedSearchChange = (value: string) => {
-    // setCurrentPage(1); // Suppression de la réinitialisation de la page
     setSearchQuery(value);
   };
   
-  // Suppression de handlePageChange
-
   const renderContent = () => {
-    // Si isLoading est TRUE, le spinner s'affiche (cela devrait être transitoire)
-    if (isLoading) {
-        //         return <PageSpinner />;
+    // Si l'un des chargements est VRAI, affiche le spinner
+    if (combinedIsLoading) {
+        return <PageSpinner />;
     }
     
-    // Si la requête a échoué (error est une string non vide)
-    if (!!error) {
-        return <ErrorPageLayout title="Error loading participants" message={error} />;
+    // Si une erreur est présente (détails de l'événement ou participants)
+    if (!!combinedError) {
+        return <ErrorPageLayout title="Error loading event data" message={combinedError} />;
     }
         
     // Si la liste est vide (participantsData est non-null mais la liste est vide)

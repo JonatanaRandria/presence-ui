@@ -4,10 +4,12 @@ import { api } from '@/api/api';
 // Importing reducers with the full path because reexporting from src/features/{featureName} causes issues using preloadedState in tests
 /* eslint-disable no-restricted-imports */
 import authReducer from '@/features/auth/stores/authSlice';
+import generalReducer from '@/features/attendance/stores/generalSlice'; 
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   auth: authReducer,
+  general: generalReducer, 
 });
 
 
@@ -24,6 +26,7 @@ export const setupStore = (preloadedState?: Partial<RootState>) =>
 
 export const store = setupStore();
 
+// RootState est maintenant correctement inféré pour inclure { ..., general: GeneralState }
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];

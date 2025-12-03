@@ -1,4 +1,7 @@
+// Fichier: '@/features/attendance/components/AttendanceCodeDisplayModal.tsx'
+
 import React from 'react';
+import ReactDOM from 'react-dom'; // Import de ReactDOM
 import { useNavigate } from 'react-router-dom';
 
 interface AttendanceCodeDisplayModalProps {
@@ -19,23 +22,26 @@ export const AttendanceCodeDisplayModal = ({
     if (!show) return null;
 
     const handleGoToAttendees = () => {
-        onClose(); // Fermer la modal
-        // Redirection vers la liste des participants (route mockée)
+        onClose(); 
         navigate(`/event/${eventId}/attendance`); 
     };
 
-    return (
+    // Le contenu du modal est isolé
+    const modalContent = (
         <>
+            {/* Background overlay */}
             <div
-                className="modal-backdrop fade show"
-                style={{ zIndex: 1040 }}
+                className="modal-backdrop fade show position-absolute"
+                style={{ zIndex: 2000 }}
                 onClick={onClose}
             ></div>
+            
+            {/* Modal Content */}
             <div
                 className="modal d-block"
                 tabIndex={-1}
                 role="dialog"
-                style={{ zIndex: 1050 }}
+                style={{ zIndex: 2001 }}
             >
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
@@ -58,11 +64,7 @@ export const AttendanceCodeDisplayModal = ({
                                 <h3>
                                     <strong>{eventCode}</strong>
                                 </h3>
-                        
                             </div>
-                            
-                           
-
                         </div>
 
                         {/* Footer */}
@@ -81,5 +83,10 @@ export const AttendanceCodeDisplayModal = ({
                 </div>
             </div>
         </>
+    );
+
+    return ReactDOM.createPortal(
+        modalContent,
+        document.body
     );
 };
