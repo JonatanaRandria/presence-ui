@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { InputField } from "@/components/Form/InputField";
 import * as yup from "yup";
 import { usePostEvent } from "../hooks/usePostEvent";
-
+import { useAuth } from "@/features/auth"; // 💡 Importation du hook useAuth
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -15,18 +15,28 @@ const schema = yup.object().shape({
       "End date must be after start date",
       function (end) {
         const start = this.parent.start_datetime;
+        // La validation doit être ignorée si les dates sont absentes
         return !start || !end ? true : new Date(end) >= new Date(start);
       }
     ),
   location_name: yup.string().required("Location is required"),
-  createdBy: yup.string().required(),
+  // Le champ createdBy doit être de type string (l'ID utilisateur)
+  createdBy: yup.string().required("User ID is missing"),
 });
 
 export const AddEventPage = () => {
   const navigate = useNavigate();
+  // 💡 CORRECTION : Récupérer userId de la source de vérité Redux via useAuth
+  const { userId } = useAuth(); 
 
-  const rawUserId = localStorage.getItem("userid") ?? "";
-  const userId = rawUserId.replace(/"/g, "");
+  // L'utilisateur doit être connecté pour accéder à cette page (géré par protectedRoutes),
+  // mais une vérification supplémentaire est utile.
+  if (!userId) {
+    // Ceci ne devrait jamais arriver si protectedRoutes fonctionne
+    return <p className="text-danger text-center mt-5">Error: User not authenticated.</p>;
+  }
+  
+  // Utilisation de userId sans conversion ni suppression de guillemets
   const { register, handleSubmit, errors, isSubmitting } = usePostEvent({
     schema,
     defaultValues: {
@@ -34,11 +44,12 @@ export const AddEventPage = () => {
       start_datetime: "",
       end_datetime: "",
       location_name: "",
-      createdBy: userId,
+      createdBy: userId, // ✅ Utilisation directe de l'ID utilisateur
     },
     onSuccess: () => {
       alert("Event created successfully!");
-      navigate("/", { replace: true });
+      // Assurez-vous que '/' est votre route principale après l'événement
+      navigate("/event", { replace: true }); 
     },
   });
 
@@ -84,8 +95,8 @@ export const AddEventPage = () => {
             />
           </div>
 
-          {/* Hidden field for createdBy */}
-          <input type="hidden" {...register("createdBy")} />
+          {/* Hidden field for createdBy - Pas besoin de valeur ici, car elle est dans defaultValues */}
+          <input type="hidden" {...register("createdBy")} /> 
 
           <button className="btn btn-primary w-100 mt-3" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Create Event"}

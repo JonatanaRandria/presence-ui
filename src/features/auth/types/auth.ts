@@ -7,6 +7,12 @@ export type User = {
     gender: string;
     image: string;
   };
+
+export type AuthUser = {
+  id : string;
+  username : string;
+  email : string;
+}
   
   
   export type LoginCredentials = {
@@ -30,10 +36,12 @@ export type User = {
   export type AuthState = {
     user: User | null;
     token: string | null;
-    remember: boolean | null;
   };
   
   export type GetUserByIdDTO = {
     userId: string;
   };
   
+ export  type TokenVerificationCredentials = {
+  token: string;
+};

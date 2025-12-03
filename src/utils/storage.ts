@@ -1,18 +1,18 @@
-
+// /src/utils/storage.ts
 
 const storage = {
-  getToken: () => {
-    return JSON.parse(window.localStorage.getItem(`token`) as string);
+  getToken: (): string | null => {
+    return window.localStorage.getItem(`token`);
   },
-  getUserId: () => {
-    return JSON.parse(window.localStorage.getItem(`userId`) as string);
+  getUserId: (): string | null => {
+    return window.localStorage.getItem(`userId`);
   },
-  setToken: ( key : string, token: string) => {
-    window.localStorage.setItem(key, JSON.stringify(token));
+  setToken: (key : 'token' | 'userId', value: string) => {
+    window.localStorage.setItem(key, value);
   },
   clearToken: () => {
     window.localStorage.removeItem(`token`);
-    window.localStorage.removeItem(`userid`);
+    window.localStorage.removeItem(`userId`);
   },
 };
 

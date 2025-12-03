@@ -4,8 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from '@/lib/useForm';
 import { getErrorMessage } from '@/api/utils';
 import type { LoginCredentials, User } from '../types/auth';
-import { useLoginMutation } from '../api/loginApi';
-import { rememberAuth } from '../stores/authSlice';
+import { useLoginWithCredentialsMutation } from '../api/loginApi'; 
 import { useAppDispatch } from '@/hooks/store';
 
 type useLoginUserProps = {
@@ -16,21 +15,23 @@ type useLoginUserProps = {
 
 export const useLoginUser = ({ schema, defaultValues, onSuccess }: useLoginUserProps) => {
   const dispatch = useAppDispatch();
+  // ❌ Le type <LoginCredentials> ne doit plus contenir 'remember'
   const useFormApi = useForm<LoginCredentials>({ resolver: yupResolver(schema), defaultValues });
   const { handleSubmit, formState } = useFormApi;
-  const [userLogin, mutationState] = useLoginMutation();
+  const [userLogin, mutationState] = useLoginWithCredentialsMutation();
 
+  // ❌ Suppression de '{ remember, ...formState }' dans handleSubmit
   const onSubmit = useCallback(
-    handleSubmit(async ({ remember, ...formState }) => {
+    handleSubmit(async (formState) => {
       try {
-        dispatch(rememberAuth(remember ?? false));
-        const user = await userLogin(formState).unwrap();
+        // ❌ Suppression du dispatch 'rememberAuth'
+        const user = await userLogin(formState).unwrap(); 
         onSuccess?.(user);
       } catch (err) {
         useFormApi.setError('root.serverError', { message: getErrorMessage(err) });
       }
     }),
-    [handleSubmit, useFormApi.setError, getErrorMessage, userLogin, onSuccess]
+    [handleSubmit, useFormApi.setError, userLogin, onSuccess, dispatch]
   );
 
   return {

@@ -13,7 +13,6 @@ type SetCredentialsPayload = {
 const initialState: AuthState = {
   user: null,
   token: null,
-  remember: null,
 };
 
 const prepareUser = (user: User): User => {
@@ -34,28 +33,47 @@ const slice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
-      state.remember = null;
       storage.clearToken();
     },
-    rememberAuth: (state, { payload }: PayloadAction<boolean>) => {
-      state.remember = payload;
-    },
+    // ❌ Le reducer 'rememberAuth' est supprimé
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(loginApi.endpoints.login.matchFulfilled, (state, { payload }) => {
+      // 1. Gère la connexion par identifiants
+      .addMatcher(loginApi.endpoints.loginWithCredentials.matchFulfilled, (state, { payload }) => {
         const { token, ...user } = payload;
         
         state.token = token;
-        state.user = prepareUser(payload.user);
+        state.user = prepareUser(user as User);
         
+
+        console.log(payload);
+        
+        // ✅ La sauvegarde est maintenant INCONDITIONNELLE
         storage.setToken('token', token);
-        storage.setToken('userid', payload.user.id);
+        storage.setToken('userId', payload.user.id);
+      })
+      
+      // 2. Gère la vérification de session (par token)
+      .addMatcher(loginApi.endpoints.verifyToken.matchFulfilled, (state, { payload }) => {
+        const { token, ...user } = payload;
+        
+        state.token = token;
+        state.user = prepareUser(user as User);
+        // Le token est déjà dans le local storage
+      })
+      
+      // 3. Gère l'échec de vérification
+      .addMatcher(loginApi.endpoints.verifyToken.matchRejected, (state) => {
+          state.user = null;
+          state.token = null;
+         
       });
   },
 });
 
-export const { logout, rememberAuth, setCredentials } = slice.actions; 
+// ❌ 'rememberAuth' est retiré de l'exportation
+export const { logout, setCredentials } = slice.actions; 
 
 export default slice.reducer;
 

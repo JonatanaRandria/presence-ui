@@ -7,13 +7,14 @@ import { getErrorMessage } from '@/api/utils';
 import { useCreateEventMutation } from '../api/eventApi';
 
 type usePostEventProps = {
-  userId: string;
+  // ❌ SUPPRESSION : userId n'est plus requis ici car il est inclus dans defaultValues/schema
   schema: yup.ObjectSchema<CreateEvent>;
   defaultValues?: CreateEvent;
   onSuccess?: (payload: Event) => void;
 };
 
-export const usePostEvent = ({  schema, defaultValues, onSuccess }: usePostEventProps) => {
+// ❌ SUPPRESSION : userId est retiré des arguments déstructurés
+export const usePostEvent = ({ schema, defaultValues, onSuccess }: usePostEventProps) => {
   const useFormApi = useForm<CreateEvent>({ resolver: yupResolver(schema), defaultValues });
   const [createEvent] = useCreateEventMutation();
 
@@ -26,7 +27,7 @@ export const usePostEvent = ({  schema, defaultValues, onSuccess }: usePostEvent
         useFormApi.setError('root.serverError', { message: getErrorMessage(err) });
       }
     }),
-    [useFormApi.handleSubmit, useFormApi.setError, getErrorMessage, onSuccess]
+    [useFormApi.handleSubmit, useFormApi.setError, createEvent, onSuccess] // 💡 Mise à jour des dépendances
   );
 
   return {

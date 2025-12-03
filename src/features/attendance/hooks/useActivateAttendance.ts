@@ -24,12 +24,7 @@ export const useActivateAttendance = () => {
    * @param longitude La longitude actuelle du responsable.
    * @returns La réponse de l'API en cas de succès.
    */
-  const cleanId = (id: string | null): string | null => {
-    if (id && typeof id === 'string') {
-      return id.replace(/^"|"$/g, '');
-    }
-    return id;
-  };
+
   const handleActivate = async (
     eventId: string, 
     latitude: number,
@@ -37,8 +32,8 @@ export const useActivateAttendance = () => {
   ): Promise<AttendanceActionResponse | undefined> => {
     setActivationLocalError(null); 
     
-    const rawUserId = localStorage.getItem('userid'); 
-    const currentUserId = cleanId(rawUserId); 
+   
+    const currentUserId = localStorage.getItem('userId'); 
 
     if (!currentUserId) {
       setActivationLocalError("Erreur d'authentification: ID utilisateur introuvable pour la désignation du responsable.");
